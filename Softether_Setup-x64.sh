@@ -118,9 +118,9 @@ sleep 5
 #Update Stuff
 sysctl --system
 #Configure IPTables
-externalIP=$(curl -s ipv4.icanhazip.com)
+internalIP=$(/sbin/ifconfig | grep "inet addr:" | cut -d ":" -f 2 | awk '{print $1}' | grep -v "127.0.0.1" | grep -v "10.0.2.1")
 sleep 5
-iptables -t nat -A POSTROUTING -s 10.0.2.0/24 -j SNAT --to-source $externalIP
+iptables -t nat -A POSTROUTING -s 10.0.2.0/24 -j SNAT --to-source $internalIP
 #Make IPTables Persistent
 apt-get install iptables-persistent -y
 sleep 5
